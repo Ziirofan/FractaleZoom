@@ -32,17 +32,15 @@
 #   rm *.o prog
 
 CC=g++
-CFLAGS= -Wall -std=c++14 -g#-O3
+CFLAGS= -Wall -std=c++14 -O3
 OPENCV= `pkg-config --cflags --libs opencv`
 SDLFLAGS= $(sdl2-config --cflags)
 SDLLIBS= $(sdl2-config --libs)
-SDLIM = -lSDL2_image
+SRC= main.cpp julia.cpp
 
-julia: GSImage.o julia.cpp main.cpp 
-		$(CC) -o julia $(CFLAGS) main.cpp julia.cpp GSImage.o $(sdl2-config --cflags --libs) `pkg-config --cflags --libs opencv` -lSDL2_image -lSDL2
+julia: main.cpp julia.cpp julia.hpp
+		$(CC) -o julia $(CFLAGS) $(SRC) -fopenmp $(OPENCV)
 
-GSImage.o: GSImage.cpp GSImage.hpp
-		$(CC) -c $(CFLAGS) GSImage.cpp $(SDLFLAGS) $(SDLIM)
 
 clean:
-		rm -r *.o julia
+		rm -r *.o julia *.avi
